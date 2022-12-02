@@ -15,21 +15,16 @@ class PromoPage extends StatefulWidget {
   State<PromoPage> createState() => _PromoPageState();
 }
 
-class _PromoPageState extends State<PromoPage>
-    with SingleTickerProviderStateMixin {
-  late final TabController tabController;
-
-  @override
-  void initState() {
-    tabController = TabController(length: 2, vsync: this);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
-  }
+class _PromoPageState extends State<PromoPage> {
+  final List<Map<String, dynamic>> promoMap = [
+    {
+      "judul": "Diskon 50% untuk anak baru",
+      "berlaku": "Berlaku hingga 06 Sep 2022",
+      "syarat":
+          "Tanpa minimal pembelian untuk semua minuman non-promo dengan diskon 50% s/d Rp.20000. Promo berlaku di seluruh outlet Ngopeee",
+      "urlimage": "./assets/image/produk_c.JPG"
+    }
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -69,53 +64,66 @@ class _PromoPageState extends State<PromoPage>
               const SizedBox(
                 height: 16.0,
               ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => PromoDetail()));
-                  });
-                },
-                child: Container(
-                  width: 350.0,
-                  height: 64.0,
-                  padding: EdgeInsets.all(12.0),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.16),
-                        blurRadius: 8,
-                        spreadRadius: 1,
-                      )
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Diskon 50% untuk anak baru',
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600,
+              ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: promoMap.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PromoDetail(
+                                    judul:
+                                        '${promoMap.elementAt(index)['judul']}',
+                                    berlaku:
+                                        '${promoMap.elementAt(index)['berlaku']}',
+                                    syarat:
+                                        '${promoMap.elementAt(index)['syarat']}',
+                                    urlimage:
+                                        '${promoMap.elementAt(index)['urlimage']}')));
+                      },
+                      child: Container(
+                        width: 350.0,
+                        height: 64.0,
+                        padding: EdgeInsets.all(12.0),
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 0.16),
+                              blurRadius: 8,
+                              spreadRadius: 1,
+                            )
+                          ],
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${promoMap.elementAt(index)['judul']}',
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              '${promoMap.elementAt(index)['syarat']}',
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        'Tanpa minimal pembelian untuk semua minuman non-promo dengan diskon 50% s/d Rp 20000. Promo berlaku di seluruh outlet Ngopee',
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                    );
+                  }),
             ],
           ),
         ),
@@ -156,7 +164,12 @@ class _PromoPageState extends State<PromoPage>
                 MaterialButton(
                   onPressed: () {
                     setState(
-                      () {},
+                      () {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const OrderPage();
+                        }));
+                      },
                     );
                   },
                   child: Column(
@@ -173,7 +186,7 @@ class _PromoPageState extends State<PromoPage>
                       () {
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) {
-                          return const OrderPage();
+                          return const PromoPage();
                         }));
                       },
                     );
